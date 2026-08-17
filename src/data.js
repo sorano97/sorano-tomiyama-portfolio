@@ -1,3 +1,5 @@
+import morillionImage from '../pictures/morillion.webp'
+
 export const profile = {
   introduction: [
     '神山まるごと高専で学びながら、プログラミングやデザイン、事業づくりなど、興味を持ったさまざまな分野に挑戦しています。',
@@ -28,7 +30,9 @@ const baseWorks = [
 ]
 
 export const works = baseWorks.map(([slug, title, imageTitle, category, imageDescription], index) => ({
-  slug, title, imageTitle, category, imageDescription, year: '2026',
+  slug, title, imageTitle, category, imageDescription,
+  image: slug === 'morillion' ? morillionImage : null,
+  year: '2026',
   role: index === 2 ? 'Project Member' : 'Planning / Design',
   tools: index === 2 ? 'CAD / Engineering' : 'Figma / Illustrator',
   team: 'Team Project', status: 'Ongoing',

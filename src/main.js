@@ -16,6 +16,10 @@ const placeholder = (title, description, className = '') => `
     <span>${title}</span><small>${description}</small>
   </div>`
 
+const workMedia = (work, className = '') => work.image
+  ? `<img class="project-image ${className}" src="${work.image}" alt="${work.title}">`
+  : placeholder(work.imageTitle, work.imageDescription, className)
+
 const header = (detail = false) => `
   <header class="site-header">
     <a class="brand" href="${href('/')}">Sorano</a>
@@ -47,7 +51,7 @@ function home() {
       </section>
       <section id="works" class="section works reveal"><div class="section-heading"><p class="eyebrow">SELECTED PROJECTS</p><h2>WORKS</h2><p>01 — 06</p></div>
         <div class="work-track" data-infinite-carousel>${[...works, ...works, ...works].map((w, i) => `<a class="work-card" href="${href(`/works/${w.slug}`)}">
-          <div class="work-visual">${placeholder(w.imageTitle, w.imageDescription)}<span class="view-project">VIEW PROJECT</span></div>
+          <div class="work-visual">${workMedia(w)}<span class="view-project">VIEW PROJECT</span></div>
           <div class="work-meta"><p>${String((i % works.length) + 1).padStart(2, '0')} / ${w.category}</p><h3>${w.title}</h3></div></a>`).join('')}</div>
         <p class="swipe-hint">DRAG / SWIPE →</p>
       </section>
@@ -65,10 +69,10 @@ function detailPage(work) {
       <dl class="project-info">${[['CATEGORY', work.category], ['YEAR', work.year], ['ROLE', work.role], ['TOOLS', work.tools], ['TEAM', work.team], ['STATUS', work.status]].map(([a,b]) => `<div><dt>${a}</dt><dd>${b}</dd></div>`).join('')}</dl>
     </section>
     <div class="detail-body">
-      <div class="detail-cover reveal">${placeholder(work.imageTitle, work.imageDescription)}</div>
+      <div class="detail-cover reveal">${workMedia(work)}</div>
       ${work.sections.map((s, i) => `<section class="story reveal"><p class="story-number">${s[0]}</p><div><h2>${s[1]}</h2><p>${s[2]}</p></div></section>${i === 3 ? gallery(work) : ''}`).join('')}
     </div>
-    <a class="next-project reveal" href="${href(`/works/${next.slug}`)}"><p>NEXT PROJECT →</p><div><h2>${next.title}</h2>${placeholder(next.imageTitle, next.imageDescription)}</div></a>
+    <a class="next-project reveal" href="${href(`/works/${next.slug}`)}"><p>NEXT PROJECT →</p><div><h2>${next.title}</h2>${workMedia(next)}</div></a>
   </main>${footer()}`
 }
 
@@ -92,7 +96,7 @@ function creativePage() {
 
 function nextLink(slug) {
   const next = works.find(w => w.slug === slug)
-  return `<a class="next-project reveal" href="${href(`/works/${next.slug}`)}"><p>NEXT PROJECT →</p><div><h2>${next.title}</h2>${placeholder(next.imageTitle, next.imageDescription)}</div></a>`
+  return `<a class="next-project reveal" href="${href(`/works/${next.slug}`)}"><p>NEXT PROJECT →</p><div><h2>${next.title}</h2>${workMedia(next)}</div></a>`
 }
 
 function notFound() {
