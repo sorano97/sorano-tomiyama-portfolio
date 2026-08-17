@@ -49,9 +49,9 @@ function home() {
           <div class="interests">${profile.interests.map(x => `<span>${x}</span>`).join('')}</div>
         </div>
       </section>
-      <section id="works" class="section works reveal"><div class="section-heading"><p class="eyebrow">SELECTED PROJECTS</p><h2>WORKS</h2><p>01 — 06</p></div>
+      <section id="works" class="section works reveal"><div class="section-heading"><p class="eyebrow">SELECTED PROJECTS</p><h2>WORKS</h2><p>01 — ${String(works.length).padStart(2, '0')}</p></div>
         <div class="work-track" data-infinite-carousel>${[...works, ...works, ...works].map((w, i) => `<a class="work-card" href="${href(`/works/${w.slug}`)}">
-          <div class="work-visual">${workMedia(w)}<span class="view-project">VIEW PROJECT</span></div>
+          <div class="work-visual work-visual-${w.slug}">${workMedia(w)}<span class="view-project">VIEW PROJECT</span></div>
           <div class="work-meta"><p>${String((i % works.length) + 1).padStart(2, '0')} / ${w.category}</p><h3>${w.title}</h3></div></a>`).join('')}</div>
         <p class="swipe-hint">DRAG / SWIPE →</p>
       </section>

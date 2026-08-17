@@ -1,4 +1,10 @@
 import morillionImage from '../pictures/morillion.webp'
+import hefeiImage from '../pictures/hefei-web.jpg'
+import hyakuninImage from '../pictures/百人一首事業.png'
+import hanabiImage from '../pictures/Hanabi.png'
+import designFesImage from '../pictures/design-fes.jpg'
+import techImage from '../pictures/tech-works.jpg'
+import creativeImage from '../pictures/creative.png'
 
 export const profile = {
   introduction: [
@@ -21,6 +27,7 @@ const placeholderCopy = {
 }
 
 const baseWorks = [
+  ['hefei-ambassador', '合肥市友好大使', 'HEFEI FRIENDSHIP AMBASSADOR', 'GLOBAL / CULTURAL EXCHANGE', '国際交流・友好大使の活動を象徴する画像'],
   ['morillion', '防犯事業 モリリオン', 'MORILLION', 'BUSINESS', '防犯事業を象徴する画像'],
   ['hyakunin-cosme', '百人一首コスメブランド', 'HYAKUNIN COSME', 'BUSINESS / DESIGN', 'コスメブランドビジュアル'],
   ['hanabi', 'FRC / Hanabi', 'FRC / HANABI', 'ROBOTICS / PROJECT', 'ロボットまたは活動写真'],
@@ -29,12 +36,22 @@ const baseWorks = [
   ['creative', 'CREATIVE WORKS', 'CREATIVE WORKS', 'CREATIVE', '創作作品'],
 ]
 
+const workImages = {
+  'hefei-ambassador': hefeiImage,
+  morillion: morillionImage,
+  'hyakunin-cosme': hyakuninImage,
+  hanabi: hanabiImage,
+  'design-fes': designFesImage,
+  tech: techImage,
+  creative: creativeImage,
+}
+
 export const works = baseWorks.map(([slug, title, imageTitle, category, imageDescription], index) => ({
   slug, title, imageTitle, category, imageDescription,
-  image: slug === 'morillion' ? morillionImage : null,
+  image: workImages[slug] || null,
   year: '2026',
-  role: index === 2 ? 'Project Member' : 'Planning / Design',
-  tools: index === 2 ? 'CAD / Engineering' : 'Figma / Illustrator',
+  role: slug === 'hanabi' ? 'Project Member' : 'Planning / Design',
+  tools: slug === 'hanabi' ? 'CAD / Engineering' : 'Figma / Illustrator',
   team: 'Team Project', status: 'Ongoing',
   summary: 'ここにプロジェクトの短い概要が入ります。',
   sections: [
