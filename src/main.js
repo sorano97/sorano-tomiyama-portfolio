@@ -4,7 +4,12 @@ import heroImage from '../pictures/HERO.jpeg'
 import aboutImage from '../pictures/ME.JPG'
 
 const app = document.querySelector('#app')
-const path = location.pathname.replace(/\/$/, '') || '/'
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
+const currentPath = basePath && location.pathname.startsWith(basePath)
+  ? location.pathname.slice(basePath.length)
+  : location.pathname
+const path = currentPath.replace(/\/$/, '') || '/'
+const href = (target = '/') => `${basePath}${target}` || '/'
 
 const placeholder = (title, description, className = '') => `
   <div class="placeholder ${className}" role="img" aria-label="${title} — ${description}">
@@ -13,10 +18,10 @@ const placeholder = (title, description, className = '') => `
 
 const header = (detail = false) => `
   <header class="site-header">
-    <a class="brand" href="/">Sorano</a>
+    <a class="brand" href="${href('/')}">Sorano</a>
     <button class="menu-button" aria-label="メニューを開く" aria-expanded="false"><i></i><i></i></button>
     <nav class="nav" aria-label="メインナビゲーション">
-      ${detail ? '<a href="/">HOME</a><a href="/#works">WORKS</a>' : '<a href="#about">ABOUT</a><a href="#works">WORKS</a><a href="#sns">SNS</a>'}
+      ${detail ? `<a href="${href('/')}">HOME</a><a href="${href('/#works')}">WORKS</a>` : '<a href="#about">ABOUT</a><a href="#works">WORKS</a><a href="#sns">SNS</a>'}
     </nav>
   </header>`
 
@@ -41,7 +46,7 @@ function home() {
         </div>
       </section>
       <section id="works" class="section works reveal"><div class="section-heading"><p class="eyebrow">SELECTED PROJECTS</p><h2>WORKS</h2><p>01 — 06</p></div>
-        <div class="work-track" data-infinite-carousel>${[...works, ...works, ...works].map((w, i) => `<a class="work-card" href="/works/${w.slug}">
+        <div class="work-track" data-infinite-carousel>${[...works, ...works, ...works].map((w, i) => `<a class="work-card" href="${href(`/works/${w.slug}`)}">
           <div class="work-visual">${placeholder(w.imageTitle, w.imageDescription)}<span class="view-project">VIEW PROJECT</span></div>
           <div class="work-meta"><p>${String((i % works.length) + 1).padStart(2, '0')} / ${w.category}</p><h3>${w.title}</h3></div></a>`).join('')}</div>
         <p class="swipe-hint">DRAG / SWIPE →</p>
@@ -56,14 +61,14 @@ function detailPage(work) {
   const next = works[(works.indexOf(work) + 1) % works.length]
   document.title = `${work.title} — Sorano Tomiyama`
   app.innerHTML = `${header(true)}<main class="detail">
-    <section class="detail-hero reveal"><div class="detail-title"><a href="/#works" class="back">← ALL WORKS</a><p class="eyebrow">${work.category}</p><h1>${work.title}</h1><p class="summary">${work.summary}</p></div>
+    <section class="detail-hero reveal"><div class="detail-title"><a href="${href('/#works')}" class="back">← ALL WORKS</a><p class="eyebrow">${work.category}</p><h1>${work.title}</h1><p class="summary">${work.summary}</p></div>
       <dl class="project-info">${[['CATEGORY', work.category], ['YEAR', work.year], ['ROLE', work.role], ['TOOLS', work.tools], ['TEAM', work.team], ['STATUS', work.status]].map(([a,b]) => `<div><dt>${a}</dt><dd>${b}</dd></div>`).join('')}</dl>
     </section>
     <div class="detail-body">
       <div class="detail-cover reveal">${placeholder(work.imageTitle, work.imageDescription)}</div>
       ${work.sections.map((s, i) => `<section class="story reveal"><p class="story-number">${s[0]}</p><div><h2>${s[1]}</h2><p>${s[2]}</p></div></section>${i === 3 ? gallery(work) : ''}`).join('')}
     </div>
-    <a class="next-project reveal" href="/works/${next.slug}"><p>NEXT PROJECT →</p><div><h2>${next.title}</h2>${placeholder(next.imageTitle, next.imageDescription)}</div></a>
+    <a class="next-project reveal" href="${href(`/works/${next.slug}`)}"><p>NEXT PROJECT →</p><div><h2>${next.title}</h2>${placeholder(next.imageTitle, next.imageDescription)}</div></a>
   </main>${footer()}`
 }
 
@@ -73,25 +78,25 @@ function gallery(work) {
 
 function techPage() {
   document.title = 'TECH WORKS — Sorano Tomiyama'
-  app.innerHTML = `${header(true)}<main class="gallery-page"><section class="gallery-intro reveal"><a href="/#works" class="back">← ALL WORKS</a><p class="eyebrow">TECHNOLOGY</p><h1>TECH WORKS</h1><p>プログラミングや電子工作を通して、興味を実際に動く形へ変えた作品を紹介します。</p></section>
+  app.innerHTML = `${header(true)}<main class="gallery-page"><section class="gallery-intro reveal"><a href="${href('/#works')}" class="back">← ALL WORKS</a><p class="eyebrow">TECHNOLOGY</p><h1>TECH WORKS</h1><p>プログラミングや電子工作を通して、興味を実際に動く形へ変えた作品を紹介します。</p></section>
     <section class="tech-grid">${techWorks.map((x,i) => `<article class="tech-item reveal">${placeholder(x[0], x[1])}<p class="eyebrow">0${i+1} / ${x[2]}</p><h2>${x[0]}</h2><p>${x[3]}</p><a href="#">VIEW PROJECT ↗</a></article>`).join('')}</section>
     ${nextLink('creative')}</main>${footer()}`
 }
 
 function creativePage() {
   document.title = 'CREATIVE WORKS — Sorano Tomiyama'
-  app.innerHTML = `${header(true)}<main class="gallery-page"><section class="gallery-intro reveal"><a href="/#works" class="back">← ALL WORKS</a><p class="eyebrow">ART & DESIGN</p><h1>CREATIVE<br>WORKS</h1><p>イラスト、絵画、グラフィックデザイン。手を動かしながら生まれた創作を集めています。</p></section>
+  app.innerHTML = `${header(true)}<main class="gallery-page"><section class="gallery-intro reveal"><a href="${href('/#works')}" class="back">← ALL WORKS</a><p class="eyebrow">ART & DESIGN</p><h1>CREATIVE<br>WORKS</h1><p>イラスト、絵画、グラフィックデザイン。手を動かしながら生まれた創作を集めています。</p></section>
     <section class="creative-grid">${creativeWorks.map((x,i) => `<figure class="creative-item ${x[2]} reveal">${placeholder(x[0], x[1])}<figcaption><span>0${i+1}</span>${x[0]}</figcaption></figure>`).join('')}</section>
     ${nextLink('morillion')}</main>${footer()}`
 }
 
 function nextLink(slug) {
   const next = works.find(w => w.slug === slug)
-  return `<a class="next-project reveal" href="/works/${next.slug}"><p>NEXT PROJECT →</p><div><h2>${next.title}</h2>${placeholder(next.imageTitle, next.imageDescription)}</div></a>`
+  return `<a class="next-project reveal" href="${href(`/works/${next.slug}`)}"><p>NEXT PROJECT →</p><div><h2>${next.title}</h2>${placeholder(next.imageTitle, next.imageDescription)}</div></a>`
 }
 
 function notFound() {
-  app.innerHTML = `${header(true)}<main class="not-found"><p class="eyebrow">404</p><h1>Page not found.</h1><a href="/">BACK TO HOME →</a></main>${footer()}`
+  app.innerHTML = `${header(true)}<main class="not-found"><p class="eyebrow">404</p><h1>Page not found.</h1><a href="${href('/')}">BACK TO HOME →</a></main>${footer()}`
 }
 
 if (path === '/') home()
