@@ -41,9 +41,9 @@ function home() {
         </div>
       </section>
       <section id="works" class="section works reveal"><div class="section-heading"><p class="eyebrow">SELECTED PROJECTS</p><h2>WORKS</h2><p>01 — 06</p></div>
-        <div class="work-track">${works.map((w, i) => `<a class="work-card" href="/works/${w.slug}">
+        <div class="work-track" data-infinite-carousel>${[...works, ...works, ...works].map((w, i) => `<a class="work-card" href="/works/${w.slug}">
           <div class="work-visual">${placeholder(w.imageTitle, w.imageDescription)}<span class="view-project">VIEW PROJECT</span></div>
-          <div class="work-meta"><p>${String(i + 1).padStart(2, '0')} / ${w.category}</p><h3>${w.title}</h3></div></a>`).join('')}</div>
+          <div class="work-meta"><p>${String((i % works.length) + 1).padStart(2, '0')} / ${w.category}</p><h3>${w.title}</h3></div></a>`).join('')}</div>
         <p class="swipe-hint">DRAG / SWIPE →</p>
       </section>
       <section id="sns" class="section sns reveal"><div class="section-heading"><p class="eyebrow">FIND ME ONLINE</p><h2>SNS</h2></div>
@@ -109,6 +109,32 @@ menuButton?.addEventListener('click', () => {
   menuButton.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く')
 })
 document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', () => document.body.classList.remove('menu-open')))
+
+const workCarousel = document.querySelector('[data-infinite-carousel]')
+if (workCarousel) {
+  const setLength = works.length
+  let setWidth = 0
+  let repositioning = false
+
+  const placeAtMiddleSet = () => {
+    const cards = workCarousel.children
+    if (cards.length < setLength * 3) return
+    setWidth = cards[setLength].offsetLeft - cards[0].offsetLeft
+    workCarousel.scrollLeft = setWidth
+  }
+
+  requestAnimationFrame(placeAtMiddleSet)
+  window.addEventListener('resize', placeAtMiddleSet)
+  workCarousel.addEventListener('scroll', () => {
+    if (!setWidth || repositioning) return
+    const position = workCarousel.scrollLeft
+    if (position < setWidth * .5 || position > setWidth * 1.5) {
+      repositioning = true
+      workCarousel.scrollLeft = position < setWidth * .5 ? position + setWidth : position - setWidth
+      requestAnimationFrame(() => { repositioning = false })
+    }
+  }, { passive: true })
+}
 
 const observer = new IntersectionObserver(entries => entries.forEach(entry => {
   if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target) }
