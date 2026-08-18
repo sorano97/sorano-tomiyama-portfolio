@@ -13,7 +13,7 @@ const href = (target = '/') => `${basePath}${target}` || '/'
 
 const placeholder = (title, description, className = '') => `
   <div class="placeholder ${className}" role="img" aria-label="${title} — ${description}">
-    <span>${title}</span><small>${description}</small>
+    <span>${title}</span><small>${description.replace(/\n/g, '<br>')}</small>
   </div>`
 
 const workMedia = (work, className = '') => work.image
@@ -52,11 +52,11 @@ function home() {
       <section id="works" class="section works reveal"><div class="section-heading"><p class="eyebrow">SELECTED PROJECTS</p><h2>WORKS</h2><p>01 — ${String(works.length).padStart(2, '0')}</p></div>
         <div class="work-track" data-infinite-carousel>${[...works, ...works, ...works].map((w, i) => `<a class="work-card" href="${href(`/works/${w.slug}`)}">
           <div class="work-visual work-visual-${w.slug}">${workMedia(w)}<span class="view-project">VIEW PROJECT</span></div>
-          <div class="work-meta"><p>${String((i % works.length) + 1).padStart(2, '0')} / ${w.category}</p><h3>${w.title}</h3></div></a>`).join('')}</div>
+          <div class="work-meta"><p>${String((i % works.length) + 1).padStart(2, '0')} / ${w.category}</p><h3>${w.title}</h3><p class="work-description">${w.description}</p></div></a>`).join('')}</div>
         <p class="swipe-hint">DRAG / SWIPE →</p>
       </section>
       <section id="sns" class="section sns reveal"><div class="section-heading"><p class="eyebrow">FIND ME ONLINE</p><h2>SNS</h2></div>
-        <div class="socials">${profile.socials.map(s => `<a href="${s.url}">${s.label}<span>↗</span></a>`).join('')}</div>
+        <div class="socials">${profile.socials.map(s => `<a href="${s.url}"${s.url.startsWith('http') ? ' target="_blank" rel="noopener noreferrer"' : ''}>${s.label}<span>↗</span></a>`).join('')}</div>
       </section>
     </main>${footer()}`
 }
@@ -70,14 +70,24 @@ function detailPage(work) {
     </section>
     <div class="detail-body">
       <div class="detail-cover reveal">${workMedia(work)}</div>
-      ${work.sections.map((s, i) => `<section class="story reveal"><p class="story-number">${s[0]}</p><div><h2>${s[1]}</h2><p>${s[2]}</p></div></section>${i === 3 ? gallery(work) : ''}`).join('')}
+      ${work.sections.map((section, i) => renderStory(section, work.detailImages[i])).join('')}
     </div>
     <a class="next-project reveal" href="${href(`/works/${next.slug}`)}"><p>NEXT PROJECT →</p><div><h2>${next.title}</h2>${workMedia(next)}</div></a>
   </main>${footer()}`
 }
 
-function gallery(work) {
-  return `<div class="process-gallery reveal">${work.gallery.map((x,i) => placeholder(x, 'ここにプロジェクト写真が入ります', i === 0 ? 'gallery-wide' : '')).join('')}</div>`
+function renderStory(section, image) {
+  return `<section class="story reveal">
+    <p class="story-number">${section.number} / ${section.label}</p>
+    <div class="story-copy">
+      <h2>${section.title}</h2>
+      ${section.paragraphs.map(text => `<p>${text}</p>`).join('')}
+      ${section.bullets ? `<ul>${section.bullets.map(item => `<li>${item}</li>`).join('')}</ul>` : ''}
+      ${section.after ? `<p>${section.after}</p>` : ''}
+      ${section.quote ? `<blockquote>${section.quote}</blockquote>` : ''}
+    </div>
+  </section>
+  ${image ? `<div class="story-image reveal">${placeholder(image[0], image[1])}</div>` : ''}`
 }
 
 function techPage() {

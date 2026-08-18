@@ -68,6 +68,7 @@ h1,h2,h3,.brand,.nav,.eyebrow,.back,.scroll-cue,.work-meta,.swipe-hint,.project-
 .work-meta { padding-top:18px; }
 .work-meta p { font-size:10px; color:var(--blue); letter-spacing:.13em; margin-bottom:10px; }
 .work-meta h3 { font-family:'Noto Sans JP',sans-serif; font-weight:500; font-size:17px; letter-spacing:.03em; }
+.work-meta .work-description { display:-webkit-box; overflow:hidden; max-width:100%; margin:13px 0 0; color:var(--muted); font:400 clamp(14px,1.05vw,15px)/1.7 'Noto Sans JP',sans-serif; letter-spacing:.025em; -webkit-box-orient:vertical; -webkit-line-clamp:3; }
 .swipe-hint { margin:35px var(--pad) 0 max(var(--pad),calc((100vw - var(--max))/2 + var(--pad))); font-size:9px; letter-spacing:.18em; color:var(--muted); }
 .sns { padding-bottom:clamp(110px,12vw,180px); }
 .socials { display:flex; justify-content:space-between; gap:30px; margin-top:80px; }
@@ -79,6 +80,9 @@ footer { height:100px; padding:0 var(--pad) 35px; display:flex; align-items:flex
 
 /* Detail */
 .detail,.gallery-page { padding-top:68px; }
+.detail .placeholder,.gallery-page .placeholder { display:none; }
+.detail-cover:has(>.placeholder),.story-image:has(>.placeholder),.creative-item:has(.placeholder) { display:none; }
+.next-project>div:has(>.placeholder) { grid-template-columns:1fr; }
 .detail-hero { max-width:var(--max); min-height:620px; margin:auto; padding:clamp(100px,12vw,170px) var(--pad) 110px; display:grid; grid-template-columns:1.1fr .9fr; gap:10vw; align-items:end; }
 .back { display:block; color:var(--muted); font:10px 'Instrument Sans'; letter-spacing:.14em; margin-bottom:70px; }
 .detail-title .eyebrow { margin-bottom:22px; }
@@ -90,10 +94,15 @@ footer { height:100px; padding:0 var(--pad) 35px; display:flex; align-items:flex
 .detail-body { max-width:1080px; margin:auto; padding:0 var(--pad); }
 .detail-cover>.placeholder { width:100%; aspect-ratio:16/10; }
 .detail-cover>.project-image { width:100%; aspect-ratio:16/10; }
-.story { display:grid; grid-template-columns:100px 1fr; padding:clamp(90px,10vw,150px) 0 0; max-width:850px; margin:auto; }
-.story-number { font-size:10px; color:var(--blue); letter-spacing:.15em; }
+.story { display:grid; grid-template-columns:150px 1fr; padding:clamp(90px,10vw,150px) 0 0; max-width:900px; margin:auto; }
+.story-number { font-size:10px; color:var(--blue); letter-spacing:.15em; white-space:nowrap; }
 .story h2 { font-size:clamp(26px,3vw,40px); letter-spacing:-.035em; font-weight:500; margin-bottom:35px; }
-.story div>p { color:#444; line-height:2.15; letter-spacing:.04em; }
+.story-copy>p { color:#444; line-height:2.15; letter-spacing:.04em; margin-bottom:22px; }
+.story-copy ul { margin:28px 0; padding-left:1.25em; color:#444; line-height:2; letter-spacing:.04em; }
+.story-copy li { padding-left:8px; }
+.story-copy blockquote { margin:50px 0 0; padding-left:24px; border-left:2px solid var(--blue); font-size:clamp(18px,2vw,25px); line-height:1.8; letter-spacing:.04em; }
+.story-image { max-width:980px; margin:clamp(55px,7vw,95px) auto 0; }
+.story-image>.placeholder { width:100%; aspect-ratio:16/10; }
 .process-gallery { padding-top:100px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
 .process-gallery>.placeholder { aspect-ratio:4/3; }
 .process-gallery .gallery-wide { grid-column:1/-1; aspect-ratio:16/9; }
@@ -172,9 +181,14 @@ footer { height:100px; padding:0 var(--pad) 35px; display:flex; align-items:flex
   .detail-body { padding:0 var(--pad); }
   .detail-cover { margin-left:calc(var(--pad) * -1); margin-right:calc(var(--pad) * -1); }
   .detail-cover>.placeholder { aspect-ratio:4/3; }
-  .story { grid-template-columns:45px 1fr; padding-top:90px; }
+  .story { display:block; padding-top:90px; }
+  .story-number { margin-bottom:22px; }
   .story h2 { font-size:27px; margin-bottom:25px; }
-  .story div>p { font-size:14px; line-height:2; }
+  .story-copy>p { font-size:14px; line-height:2; }
+  .story-copy ul { font-size:14px; }
+  .story-copy blockquote { margin-top:38px; font-size:18px; }
+  .story-image { margin-top:55px; }
+  .story-image>.placeholder { aspect-ratio:4/3; }
   .process-gallery { padding-top:75px; grid-template-columns:1fr; gap:14px; }
   .process-gallery .gallery-wide { grid-column:auto; aspect-ratio:4/3; }
   .next-project { margin-top:140px; }
