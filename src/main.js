@@ -2,6 +2,8 @@ import './style.css'
 import { profile, works, techWorks, creativeWorks } from './data.js'
 import heroImage from '../pictures/HERO.jpeg'
 import aboutImage from '../pictures/ME.JPG'
+import aboutImage2 from '../pictures/ME2.JPG'
+import aboutImage3 from '../pictures/ME3.JPG'
 
 const app = document.querySelector('#app')
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
@@ -21,7 +23,7 @@ const workMedia = (work, className = '') => work.image
   : placeholder(work.imageTitle, work.imageDescription, className)
 
 const header = (detail = false) => `
-  <header class="site-header">
+  <header class="site-header${detail ? '' : ' home-header'}">
     <a class="brand" href="${href('/')}">Sorano</a>
     <button class="menu-button" aria-label="メニューを開く" aria-expanded="false"><i></i><i></i></button>
     <nav class="nav" aria-label="メインナビゲーション">
@@ -43,7 +45,11 @@ function home() {
         <a class="scroll-cue" href="#about">SCROLL<span>↓</span></a>
       </section>
       <section id="about" class="section about reveal">
-        <div class="about-image-wrap"><img class="about-image" src="${aboutImage}" alt="冨山そらののポートレート"></div>
+        <div class="about-image-wrap">
+          <img class="about-image" src="${aboutImage}" alt="冨山そらののポートレート">
+          <img class="about-image" src="${aboutImage2}" alt="冨山そらののポートレート">
+          <img class="about-image" src="${aboutImage3}" alt="冨山そらののポートレート">
+        </div>
         <div class="about-content"><p class="eyebrow">ABOUT</p>
           <div class="intro">${profile.introduction.map(x => `<p>${x}</p>`).join('')}</div>
           <div class="interests">${profile.interests.map(x => `<span>${x}</span>`).join('')}</div>
@@ -59,6 +65,21 @@ function home() {
         <div class="socials">${profile.socials.map(s => `<a href="${s.url}"${s.url.startsWith('http') ? ' target="_blank" rel="noopener noreferrer"' : ''}>${s.label}<span>↗</span></a>`).join('')}</div>
       </section>
     </main>${footer()}`
+
+  let introStarted = false
+  const startIntro = () => {
+    if (introStarted) return
+    introStarted = true
+    requestAnimationFrame(() => document.body.classList.add('home-intro-ready'))
+  }
+  const preload = new Image()
+  preload.src = heroImage
+  if (preload.complete) startIntro()
+  else {
+    preload.addEventListener('load', startIntro, { once: true })
+    preload.addEventListener('error', startIntro, { once: true })
+    window.setTimeout(startIntro, 1600)
+  }
 }
 
 function detailPage(work) {
